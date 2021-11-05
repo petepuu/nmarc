@@ -13,6 +13,9 @@ namespace NMARC
 {
     public partial class FrmNativeModeConc : Form
     {
+        // Petri Puustinen: Added csvSeparator parameter to control CSV export output separator. Default is comma
+        private char csvSeparator = ',';
+
         public FrmNativeModeConc()
         {
             InitializeComponent();
@@ -42,6 +45,11 @@ namespace NMARC
 
             try
             {
+                if (!string.IsNullOrEmpty(txtCsvSeparator.Text))
+                {
+                    csvSeparator = char.Parse(txtCsvSeparator.Text);
+                }
+
                 var report = AlignmentReportParser.ParseAlignmentReport(txtYamlInputPath.Text);
                 
                 txtResultsBox.Text += "YAML file loaded and parsed.\n\r\n";
@@ -54,7 +62,7 @@ namespace NMARC
                 else
                 { 
                     txtResultsBox.Text += $"Exporting to {TxtOutputPath.Text}.\n\r\n";
-                    ExportReport(report);
+                    ExportReport(report, csvSeparator);
                     txtResultsBox.Text += "Export complete.\n\r\n";
                 }
             }
@@ -71,7 +79,7 @@ namespace NMARC
         /// Exports the alignment report to multiple files in a specific folder.
         /// </summary>
         /// <param name="report">AlignmentReport instance containing deserialized data.</param>
-        private void ExportReport(AlignmentReport report)
+        private void ExportReport(AlignmentReport report, char csvSeparator)
         {
             // TODO: Refactoring the code in this method requires some extra work:
             //       * Headers match up with the models. Use reflection, or something newer in C#, to get these automatically.
@@ -82,21 +90,22 @@ namespace NMARC
 
             Console.WriteLine("Write...");
             
-            WriteGroupsReport(report, basePath);
+            WriteGroupsReport(report, basePath, csvSeparator);
 
-            WriteUsersReport(report, basePath);
+            WriteUsersReport(report, basePath, csvSeparator);
 
-            WriteGroupAdminsReport(report, basePath);
+            WriteGroupAdminsReport(report, basePath, csvSeparator);
 
-            WriteActiveCommunityGuestsReport(report, basePath);
+            WriteActiveCommunityGuestsReport(report, basePath, csvSeparator);
 
-            WriteOtherCommunityGuestsReport(report, basePath);
+            WriteOtherCommunityGuestsReport(report, basePath, csvSeparator);
         }
 
-        private static void WriteGroupAdminsReport(AlignmentReport report, string basePath)
+        // Petri Puustinen: Added csvSeparator parameter to control CSV export output separator
+        private static void WriteGroupAdminsReport(AlignmentReport report, string basePath, char csvSeparator)
         {
             var groupAdminOutput = new StringBuilder();
-            groupAdminOutput.AppendLine("GroupID,CreationRightsState,Email");
+            groupAdminOutput.AppendLine($"GroupID{csvSeparator}CreationRightsState{csvSeparator}Email");
 
             foreach (var group in report.Groups)
             {
@@ -115,23 +124,24 @@ namespace NMARC
                         foreach (var adminEmail in vals)
                         {
                             var email = (string) adminEmail;
-                            groupAdminOutput.AppendLine( $"{group.Id},{key},{email}");
+                            groupAdminOutput.AppendLine( $"{group.Id}{csvSeparator}{key}{csvSeparator}{email}");
                         }
                     }
                 }
                 else
                 {
-                    groupAdminOutput.AppendLine($"{group.Id},,No Admins");
+                    groupAdminOutput.AppendLine($"{group.Id}{csvSeparator}{csvSeparator}No Admins");
                 }
             }
 
             Utilities.WriteFile($@"{basePath}\groupadmins.csv", groupAdminOutput);
         }
 
-        private static void WriteActiveCommunityGuestsReport(AlignmentReport report, string basePath)
+        // Petri Puustinen: Added csvSeparator parameter to control CSV export output separator
+        private static void WriteActiveCommunityGuestsReport(AlignmentReport report, string basePath, char csvSeparator)
         {
             var communityGuestOutput = new StringBuilder();
-            communityGuestOutput.AppendLine("GroupID,Email");
+            communityGuestOutput.AppendLine($"GroupID{csvSeparator}Email");
 
             foreach (var group in report.Groups)
             {
@@ -140,7 +150,7 @@ namespace NMARC
                     {
                         foreach (var guest in group.ActiveCommunityGuests)
                         {
-                            communityGuestOutput.AppendLine($"{group.Id},{guest}");
+                            communityGuestOutput.AppendLine($"{group.Id}{csvSeparator}{guest}");
                         }
                     }
                 }
@@ -149,10 +159,11 @@ namespace NMARC
             Utilities.WriteFile($@"{basePath}\communityguests.csv", communityGuestOutput);
         }
 
-        private static void WriteOtherCommunityGuestsReport(AlignmentReport report, string basePath)
+        // Petri Puustinen: Added csvSeparator parameter to control CSV export output separator
+        private static void WriteOtherCommunityGuestsReport(AlignmentReport report, string basePath, char csvSeparator)
         {
             var communityGuestOutput = new StringBuilder();
-            communityGuestOutput.AppendLine("GroupID,Email");
+            communityGuestOutput.AppendLine($"GroupID{csvSeparator}Email");
 
             foreach (var group in report.Groups)
             {
@@ -162,7 +173,7 @@ namespace NMARC
                     {
                         foreach (var guest in group.OtherCommunityGuests)
                         {
-                            communityGuestOutput.AppendLine($"{group.Id},{guest}");
+                            communityGuestOutput.AppendLine($"{group.Id}{csvSeparator}{guest}");
                         }
                     }
                 }
@@ -171,34 +182,36 @@ namespace NMARC
             Utilities.WriteFile($@"{basePath}\othercommunityguests.csv", communityGuestOutput);
         }
 
-        private static void WriteUsersReport(AlignmentReport report, string basePath)
+        // Petri Puustinen: Added csvSeparator parameter to control CSV export output separator
+        private static void WriteUsersReport(AlignmentReport report, string basePath, char csvSeparator)
         {
             // USERS
             var userOutput = new StringBuilder();
             userOutput.AppendLine(
-                "Email,Internal,State,PrivateFileCount,PublicMessageCount,PrivateMessageCount,LastAccessed,AAD_State");
+                $"Email{csvSeparator}Internal{csvSeparator}State{csvSeparator}PrivateFileCount{csvSeparator}PublicMessageCount{csvSeparator}PrivateMessageCount{csvSeparator}LastAccessed{csvSeparator}AAD_State");
             foreach (var user in report.Users)
             {
                 Console.WriteLine($"{user.Id}:{user.Email}");
 
-                userOutput.AppendLine(user.GetCsv());
+                userOutput.AppendLine(user.GetCsv(csvSeparator));
             }
 
             Utilities.WriteFile($@"{basePath}\users.csv", userOutput);
         }
 
-        private static void WriteGroupsReport(AlignmentReport report, string basePath)
+        // Petri Puustinen: Added csvSeparator parameter to control CSV export output separator
+        private static void WriteGroupsReport(AlignmentReport report, string basePath, char csvSeparator)
         {
             // GROUPS
             var groupOutput = new StringBuilder();
 
             groupOutput.AppendLine(
-                "Id,Name,Type,PrivacySetting,State,MessageCount,LastMessageDate,ConnectedToO365,Memberships.External,Memberships.Internal,Uploads.SharePoint,Uploads.Yammer");
+                $"Id{csvSeparator}Name{csvSeparator}Type{csvSeparator}PrivacySetting{csvSeparator}State{csvSeparator}MessageCount{csvSeparator}LastMessageDate{csvSeparator}ConnectedToO365{csvSeparator}Memberships.External{csvSeparator}Memberships.Internal{csvSeparator}Uploads.SharePoint{csvSeparator}Uploads.Yammer");
             foreach (var group in report.Groups)
             {
                 Console.WriteLine($"{@group.Id}:{@group.Name}");
 
-                groupOutput.AppendLine(@group.GetCsv());
+                groupOutput.AppendLine(@group.GetCsv(csvSeparator));
             }
 
             Utilities.WriteFile($@"{basePath}\groups.csv", groupOutput);

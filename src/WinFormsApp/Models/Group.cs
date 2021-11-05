@@ -50,10 +50,10 @@ namespace NMARC.Models
         /// Gets a representation of the group as a row of CSV
         /// </summary>
         /// <returns>String containing CSV.</returns>
-        public string GetCsv()
+        public string GetCsv(char csvSeparator)
         {
             return
-                $@"{Id},{Name},{Type},{PrivacySetting},{State},{MessageCount},{LastMessageDate},{ConnectedToO365},{Memberships.External},{Memberships.Internal},{Uploads.SharePoint},{Uploads.Yammer}";
+                $@"{Id}{csvSeparator}{Name}{csvSeparator}{Type}{csvSeparator}{PrivacySetting}{csvSeparator}{State}{csvSeparator}{MessageCount}{csvSeparator}{LastMessageDate}{csvSeparator}{ConnectedToO365}{csvSeparator}{Memberships.External}{csvSeparator}{Memberships.Internal}{csvSeparator}{Uploads.SharePoint}{csvSeparator}{Uploads.Yammer}";
         }
     }
 }

@@ -48,10 +48,10 @@ namespace NMARC.Models
         /// Gets a representation of the user as a row of CSV
         /// </summary>
         /// <returns>String containing CSV.</returns>
-        public string GetCsv()
+        public string GetCsv(char csvSeparator)
         {
             return
-                $@"{Email},{Internal},{State},{PrivateFileCount},{PublicMessageCount},{PrivateMessageCount},{LastAccessed},{AzureADState}";
+                $@"{Email}{csvSeparator}{Internal}{csvSeparator}{State}{csvSeparator}{PrivateFileCount}{csvSeparator}{PublicMessageCount}{csvSeparator}{PrivateMessageCount}{csvSeparator}{LastAccessed}{csvSeparator}{AzureADState}";
         }
 
         public string GetTsv()

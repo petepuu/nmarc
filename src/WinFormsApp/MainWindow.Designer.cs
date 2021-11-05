@@ -42,13 +42,16 @@ namespace NMARC
             this.dlgOpenYaml = new System.Windows.Forms.OpenFileDialog();
             this.DlgSelectOutputFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.lblCsvSeparator = new System.Windows.Forms.Label();
+            this.txtCsvSeparator = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // BtnLoadYamlFile
             // 
-            this.BtnLoadYamlFile.Location = new System.Drawing.Point(12, 12);
+            this.BtnLoadYamlFile.Location = new System.Drawing.Point(18, 18);
+            this.BtnLoadYamlFile.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.BtnLoadYamlFile.Name = "BtnLoadYamlFile";
-            this.BtnLoadYamlFile.Size = new System.Drawing.Size(124, 23);
+            this.BtnLoadYamlFile.Size = new System.Drawing.Size(186, 35);
             this.BtnLoadYamlFile.TabIndex = 0;
             this.BtnLoadYamlFile.Text = "Select YAML File";
             this.toolTip.SetToolTip(this.BtnLoadYamlFile, "Specify the path to the Alignment Report downloaded from Yammer.");
@@ -59,17 +62,19 @@ namespace NMARC
             // 
             this.txtYamlInputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtYamlInputPath.Location = new System.Drawing.Point(142, 14);
+            this.txtYamlInputPath.Location = new System.Drawing.Point(213, 22);
+            this.txtYamlInputPath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtYamlInputPath.Name = "txtYamlInputPath";
             this.txtYamlInputPath.ReadOnly = true;
-            this.txtYamlInputPath.Size = new System.Drawing.Size(649, 20);
+            this.txtYamlInputPath.Size = new System.Drawing.Size(972, 26);
             this.txtYamlInputPath.TabIndex = 1;
             // 
             // BtnSetOutputDir
             // 
-            this.BtnSetOutputDir.Location = new System.Drawing.Point(13, 42);
+            this.BtnSetOutputDir.Location = new System.Drawing.Point(20, 65);
+            this.BtnSetOutputDir.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.BtnSetOutputDir.Name = "BtnSetOutputDir";
-            this.BtnSetOutputDir.Size = new System.Drawing.Size(123, 23);
+            this.BtnSetOutputDir.Size = new System.Drawing.Size(184, 35);
             this.BtnSetOutputDir.TabIndex = 2;
             this.BtnSetOutputDir.Text = "Set Output Folder";
             this.toolTip.SetToolTip(this.BtnSetOutputDir, "Set an empty output folder where the CSV files will be created.");
@@ -80,10 +85,11 @@ namespace NMARC
             // 
             this.TxtOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TxtOutputPath.Location = new System.Drawing.Point(143, 44);
+            this.TxtOutputPath.Location = new System.Drawing.Point(214, 68);
+            this.TxtOutputPath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.TxtOutputPath.Name = "TxtOutputPath";
             this.TxtOutputPath.ReadOnly = true;
-            this.TxtOutputPath.Size = new System.Drawing.Size(648, 20);
+            this.TxtOutputPath.Size = new System.Drawing.Size(970, 26);
             this.TxtOutputPath.TabIndex = 3;
             // 
             // txtResultsBox
@@ -91,20 +97,22 @@ namespace NMARC
             this.txtResultsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtResultsBox.Location = new System.Drawing.Point(12, 72);
+            this.txtResultsBox.Location = new System.Drawing.Point(18, 176);
+            this.txtResultsBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtResultsBox.Multiline = true;
             this.txtResultsBox.Name = "txtResultsBox";
             this.txtResultsBox.ReadOnly = true;
-            this.txtResultsBox.Size = new System.Drawing.Size(779, 408);
+            this.txtResultsBox.Size = new System.Drawing.Size(1166, 561);
             this.txtResultsBox.TabIndex = 4;
             // 
             // btnConvert
             // 
             this.btnConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnConvert.Enabled = false;
-            this.btnConvert.Location = new System.Drawing.Point(632, 486);
+            this.btnConvert.Location = new System.Drawing.Point(948, 748);
+            this.btnConvert.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnConvert.Name = "btnConvert";
-            this.btnConvert.Size = new System.Drawing.Size(159, 23);
+            this.btnConvert.Size = new System.Drawing.Size(238, 35);
             this.btnConvert.TabIndex = 5;
             this.btnConvert.Text = "Convert Alignment Report";
             this.toolTip.SetToolTip(this.btnConvert, "Start conversion when the input and output options are selected.");
@@ -121,11 +129,31 @@ namespace NMARC
             this.DlgSelectOutputFolder.Description = "Select an output folder for the CSV files produced by this tool. This needs to be" +
     " an empty folder.";
             // 
+            // lblCsvSeparator
+            // 
+            this.lblCsvSeparator.AutoSize = true;
+            this.lblCsvSeparator.Location = new System.Drawing.Point(32, 117);
+            this.lblCsvSeparator.Name = "lblCsvSeparator";
+            this.lblCsvSeparator.Size = new System.Drawing.Size(114, 20);
+            this.lblCsvSeparator.TabIndex = 6;
+            this.lblCsvSeparator.Text = "CSV separator";
+            // 
+            // txtCsvSeparator
+            // 
+            this.txtCsvSeparator.Location = new System.Drawing.Point(214, 117);
+            this.txtCsvSeparator.MaxLength = 1;
+            this.txtCsvSeparator.Name = "txtCsvSeparator";
+            this.txtCsvSeparator.Size = new System.Drawing.Size(50, 26);
+            this.txtCsvSeparator.TabIndex = 7;
+            this.txtCsvSeparator.Text = ",";
+            // 
             // FrmNativeModeConc
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(803, 521);
+            this.ClientSize = new System.Drawing.Size(1204, 802);
+            this.Controls.Add(this.txtCsvSeparator);
+            this.Controls.Add(this.lblCsvSeparator);
             this.Controls.Add(this.btnConvert);
             this.Controls.Add(this.txtResultsBox);
             this.Controls.Add(this.TxtOutputPath);
@@ -133,6 +161,7 @@ namespace NMARC
             this.Controls.Add(this.txtYamlInputPath);
             this.Controls.Add(this.BtnLoadYamlFile);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FrmNativeModeConc";
             this.Text = "Native Mode Alignment Report Converter";
             this.ResumeLayout(false);
@@ -151,6 +180,8 @@ namespace NMARC
         private System.Windows.Forms.OpenFileDialog dlgOpenYaml;
         private System.Windows.Forms.FolderBrowserDialog DlgSelectOutputFolder;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label lblCsvSeparator;
+        private System.Windows.Forms.TextBox txtCsvSeparator;
     }
 }
 
